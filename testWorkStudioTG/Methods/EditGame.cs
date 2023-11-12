@@ -25,7 +25,6 @@ namespace testWorkStudioTG.Methods
             if (_game.FillBoard[x][y] == 10)
             {
                 fillCompleteGame(false);
-                _game.Completed = false;
                 return;
             }
 
@@ -33,8 +32,8 @@ namespace testWorkStudioTG.Methods
             if (checkComplete())
             {
                 fillCompleteGame(true);
-                _game.Completed = true;
             }
+            checkMines();
         }
         private void fillAround(int x, int y)
         {
@@ -82,10 +81,39 @@ namespace testWorkStudioTG.Methods
                 for (int y = 0; y < _game.Field[i].Length; y++)
                 {
                     int dot = _game.FillBoard[i][y];
-                    dot = !good && dot == 10 ? 11 : 10;
+                    dot = (!good && dot == 10) ? 11 : dot;
                     _game.Field[i][y] = new FieldValueEnum((FieldValues)dot).Value();
                 }
             }
+            _game.Completed = true;
+        }
+        private void checkMines()
+        {
+            for (int i = 0; i < _game.Mines.Length; i++)
+            {
+                var x = _game.Mines[i][0];
+                var y = _game.Mines[i][1];
+                if (checkArountMine(x, y))
+                    _game.Field[x][y] = new FieldValueEnum((FieldValues)10).Value();
+
+            }
+        }
+        private bool checkArountMine(byte x, byte y)
+        {
+            for (int i = x - 1; i <= x + 1; i++)
+            {
+                if (i < 0 || i >= _game.Height)
+                    continue;
+                for (int q = y - 1; q <= y + 1; q++)
+                {
+                    if (q < 0 || q >= _game.Width)
+                        continue;
+
+                    if (i != x && y != q && _game.Field[x][q] == new FieldValueEnum(0).Value())
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }

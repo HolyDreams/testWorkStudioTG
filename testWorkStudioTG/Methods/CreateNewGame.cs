@@ -11,11 +11,13 @@ namespace testWorkStudioTG.Methods
         int _countMines;
         byte[][] _board;
         string[][] _showBoard;
+        byte[][] _mines;
         public CreateNewGame(int width, int height, int countMines)
         {
             _width = width;
             _height = height;
             _countMines = countMines;
+            _mines = new byte[countMines][];
         }
         public GameStruct GetNewGame()
         {
@@ -27,7 +29,8 @@ namespace testWorkStudioTG.Methods
                 Field = _showBoard,
                 Width = _width,
                 Height = _height,
-                MinesCount = _countMines
+                MinesCount = _countMines,
+                Mines = _mines
             };
         }
         private void createGame()
@@ -60,6 +63,7 @@ namespace testWorkStudioTG.Methods
                 var x = rnd.Next(0, _height);
                 var y = rnd.Next(0, _width);
                 setMine(x, y, board);
+                _mines[i] = new byte[] { (byte)x, (byte)y };
             }
         }
         private void setMine(int x, int y, byte[][] board)

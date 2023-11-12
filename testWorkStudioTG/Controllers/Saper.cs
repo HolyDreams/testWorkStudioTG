@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using testWorkStudioTG.Methods;
 using testWorkStudioTG.Models;
+using testWorkStudioTG.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,6 +11,11 @@ namespace testWorkStudioTG.Controllers
     [ApiController]
     public class Saper : ControllerBase
     {
+        private readonly GameService _game;
+        public Saper(GameService game) 
+        { 
+            _game = game;
+        }
         // POST api/<Saper>
         [HttpPost]
         [Route("new")]
@@ -17,11 +23,15 @@ namespace testWorkStudioTG.Controllers
         {
             try
             {
-                if (newGame.MinesCount > newGame.Width * newGame.Height)
-                    throw new Exception("Количество мин превышает количество ячеек!");
+                if (newGame.Width <= 0 || newGame.Height <= 0)
+                    return BadRequest("Попытка создать поле с 0 ячеек!");
+                else if (newGame.MinesCount > newGame.Width * newGame.Height)
+                    return BadRequest("Количество мин превышает количество ячеек!");
+                else if (newGame.Width > 256 || newGame.Height > 256)
+                    return BadRequest("Я использовал byte для поля, поэтому нельзя создать поле больше 256х256");
 
-                var gameID = Games.CreateGame(newGame);
-                return Ok(Games.LoadGame(gameID));
+                var gameID = _game.CreateGame(newGame);
+                return Ok(_game.LoadGame(gameID));
             }
             catch
             {
@@ -34,15 +44,15 @@ namespace testWorkStudioTG.Controllers
         {
             try
             {
-                if (Games.CheckFill(turn))
+                if (_game.CheckFill(turn))
                     return BadRequest("Данная ячейка уже заполнена!");
-                if (Games.CheckField(turn))
+                if (_game.CheckField(turn))
                     return BadRequest("Попытка уйти за границы поля!");
 
-                Games.AddDot(turn);
-                var game = Games.LoadGame(turn.GameID);
+                _game.AddDot(turn);
+                var game = _game.LoadGame(turn.GameID);
 
-                return Ok(Games.LoadGame(turn.GameID));
+                return Ok(_game.LoadGame(turn.GameID));
             }
             catch
             {
