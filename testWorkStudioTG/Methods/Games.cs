@@ -35,6 +35,11 @@ namespace testWorkStudioTG.Methods
             var editor = new EditGame(game);
             return editor.CheckFill(turn.Column, turn.Row);
         }
+        public static bool CheckField(GameTurnRequest turn)
+        {
+            var game = getGame(turn.GameID);
+            return turn.Column < 0 || turn.Column > game.Height - 1 || turn.Row < 0 || turn.Row > game.Width - 1;
+        }
         public static void AddDot(GameTurnRequest turn)
         {
             var game = getGame(turn.GameID);

@@ -36,14 +36,12 @@ namespace testWorkStudioTG.Controllers
             {
                 if (Games.CheckFill(turn))
                     return BadRequest("Данная ячейка уже заполнена!");
+                if (Games.CheckField(turn))
+                    return BadRequest("Попытка уйти за границы поля!");
 
                 Games.AddDot(turn);
-                var res = "";
                 var game = Games.LoadGame(turn.GameID);
-                for (int i = 0; i < game.Field.Length; i++)
-                {
-                    res += string.Join(",", game.Field[i]) + Environment.NewLine;
-                }
+
                 return Ok(Games.LoadGame(turn.GameID));
             }
             catch
