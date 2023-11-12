@@ -25,10 +25,10 @@ namespace testWorkStudioTG.Controllers
             {
                 if (newGame.Width <= 0 || newGame.Height <= 0)
                     return BadRequest("Попытка создать поле с 0 ячеек!");
-                else if (newGame.MinesCount > newGame.Width * newGame.Height)
+                else if (newGame.MinesCount > newGame.Width * newGame.Height - 1)
                     return BadRequest("Количество мин превышает количество ячеек!");
-                else if (newGame.Width > 256 || newGame.Height > 256)
-                    return BadRequest("Я использовал byte для поля, поэтому нельзя создать поле больше 256х256");
+                else if (newGame.Width > 30 || newGame.Height > 30)
+                    return BadRequest("Превышен размер поля!");
 
                 var gameID = _game.CreateGame(newGame);
                 return Ok(_game.LoadGame(gameID));
@@ -51,7 +51,11 @@ namespace testWorkStudioTG.Controllers
 
                 _game.AddDot(turn);
                 var game = _game.LoadGame(turn.GameID);
-
+                var res = "";
+                for (int i = 0; i < game.Height; i++)
+                {
+                    res += string.Join(",", game.Field[i]) + Environment.NewLine;
+                }
                 return Ok(_game.LoadGame(turn.GameID));
             }
             catch

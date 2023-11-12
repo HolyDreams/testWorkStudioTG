@@ -117,7 +117,7 @@ namespace testWorkStudioTG.Methods
                 var row = new string[_board[i].Length];
                 for (int y = 0; y < board[i].Length; y++)
                 {
-                    row[y] = new FieldValueEnum(0).Value();
+                    row[y] = FieldValueEnum.ToString(FieldValues.None);
                 }
                 _showBoard[i] = row;
             }

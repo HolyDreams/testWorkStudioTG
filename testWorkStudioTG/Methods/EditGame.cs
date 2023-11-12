@@ -12,7 +12,7 @@ namespace testWorkStudioTG.Methods
         }
         public bool CheckFill(int x, int y)
         {
-            return _game.Field[x][y] != new FieldValueEnum(0).Value();
+            return _game.Field[x][y] != FieldValueEnum.ToString(0);
         }
         public GameStruct AddDot(int x, int y)
         {
@@ -46,7 +46,7 @@ namespace testWorkStudioTG.Methods
                     continue;
                 for (int q = y - 1; q <= y + 1; q++)
                 {
-                    if (q < 0 || q >= _game.Width || _game.FillBoard[i][q] == 10 || _game.Field[i][q] != new FieldValueEnum(0).Value())
+                    if (q < 0 || q >= _game.Width || _game.FillBoard[i][q] == 10 || _game.Field[i][q] != FieldValueEnum.ToString(0))
                         continue;
 
                     if (setPoint(i, q))
@@ -57,7 +57,7 @@ namespace testWorkStudioTG.Methods
         private bool setPoint(int x, int y)
         {
             var dot = _game.FillBoard[x][y];
-            _game.Field[x][y] = new FieldValueEnum((FieldValues)dot).Value();
+            _game.Field[x][y] = FieldValueEnum.ToString((FieldValues)dot);
             return dot == 1;
         }
         private bool checkComplete()
@@ -66,7 +66,7 @@ namespace testWorkStudioTG.Methods
             {
                 for (int y = 0; y < _game.FillBoard[i].Length; y++)
                 {
-                    if (_game.FillBoard[i][y] != 10 && new FieldValueEnum((FieldValues)_game.FillBoard[i][y]).Value() != _game.Field[i][y])
+                    if (_game.FillBoard[i][y] != 10 && FieldValueEnum.ToString((FieldValues)_game.FillBoard[i][y]) != _game.Field[i][y])
                     {
                         return false;
                     }
@@ -82,7 +82,7 @@ namespace testWorkStudioTG.Methods
                 {
                     int dot = _game.FillBoard[i][y];
                     dot = (!good && dot == 10) ? 11 : dot;
-                    _game.Field[i][y] = new FieldValueEnum((FieldValues)dot).Value();
+                    _game.Field[i][y] = FieldValueEnum.ToString((FieldValues)dot);
                 }
             }
             _game.Completed = true;
@@ -94,7 +94,7 @@ namespace testWorkStudioTG.Methods
                 var x = _game.Mines[i][0];
                 var y = _game.Mines[i][1];
                 if (checkArountMine(x, y))
-                    _game.Field[x][y] = new FieldValueEnum((FieldValues)10).Value();
+                    _game.Field[x][y] = FieldValueEnum.ToString((FieldValues)10);
 
             }
         }
@@ -102,14 +102,14 @@ namespace testWorkStudioTG.Methods
         {
             for (int i = x - 1; i <= x + 1; i++)
             {
-                if (i < 0 || i >= _game.Height)
+                if (i < 0 || i >= _game.Field.Length)
                     continue;
                 for (int q = y - 1; q <= y + 1; q++)
                 {
-                    if (q < 0 || q >= _game.Width)
+                    if (q < 0 || q >= _game.Field[i].Length)
                         continue;
 
-                    if (i != x && y != q && _game.Field[x][q] == new FieldValueEnum(0).Value())
+                    if (i != x && y != q && _game.Field[i][q] == FieldValueEnum.ToString(0))
                         return false;
                 }
             }

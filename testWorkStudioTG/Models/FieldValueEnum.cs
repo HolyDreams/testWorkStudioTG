@@ -1,16 +1,25 @@
 ﻿namespace testWorkStudioTG.Models
 {
-    public class FieldValueEnum
+    public enum FieldValues : byte
     {
-        public FieldValues FieldValue { get; }
-        public FieldValueEnum(FieldValues fieldValue)
+        None,
+        Zero,
+        One,
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        M,
+        X
+    }
+    public static class FieldValueEnum
+    {
+        public static string ToString(this FieldValues val)
         {
-            FieldValue = fieldValue;
-        }
-
-        public string Value()
-        {
-            switch (FieldValue)
+            switch (val)
             {
                 case FieldValues.None:
                     return " ";
@@ -39,21 +48,6 @@
                 default:
                     throw new Exception("Попытка получать неверное значение!");
             }
-        }
-        public enum FieldValues : byte
-        {
-            None,
-            Zero,
-            One,
-            Two,
-            Three,
-            Four,
-            Five,
-            Six,
-            Seven,
-            Eight,
-            M,
-            X
         }
     }
 }
